@@ -9,11 +9,10 @@ export default function App() {
 
   const addList = () => {
     if (inputValue.trim() === "") return;
-    console.log(todoList);
 
     if (editMode && currentTodo) {
-      setTodoList((prevList) =>
-        prevList.map((todo) =>
+      setTodoList((prevList: any) =>
+        prevList.map((todo: any) =>
           todo.id === currentTodo.id ? { ...todo, value: inputValue } : todo
         )
       );
@@ -36,9 +35,9 @@ export default function App() {
     setInputValue(e.target.value);
   };
 
-  const handleDelete = (id) => {
-    setTodoList((prevList) => {
-      return prevList.filter((val) => val.id !== id);
+  const handleDelete = (id: any) => {
+    setTodoList((prevList: any) => {
+      return prevList.filter((val: any) => val.id !== id);
     });
   };
 
@@ -75,7 +74,7 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {todoList.map((todo) => (
+              {todoList.map((todo: any) => (
                 <tr key={todo.id}>
                   <td>{todo.id}</td>
                   <td>{todo.value}</td>
@@ -90,7 +89,7 @@ export default function App() {
             </tbody>
           </table>
         ) : (
-          <p>No tasks yet. Add a task to get started!</p>
+          <p>Add Today Tasks :)</p>
         )}
       </div>
     </>
