@@ -6,6 +6,7 @@ export default function App() {
   const [todoList, setTodoList]: any = useState([]);
   const [editMode, setEditMode]: any = useState(false);
   const [currentTodo, setCurrentTodo]: any = useState(null);
+  const [sortCompleted, setsortCompleted] = useState(false)
 
   const addList = () => {
     if (inputValue.trim() === "") return;
@@ -24,6 +25,7 @@ export default function App() {
         {
           id: prevList.length + 1,
           value: inputValue,
+          checked: false
         },
       ]);
     }
@@ -53,6 +55,28 @@ export default function App() {
     setCurrentTodo(null);
   };
 
+  const handleCheckbox = (id:any) => {
+    setTodoList((prevList:any) => prevList.map((todo:any) => todo.id === id ? {
+      ...todo,
+      checked: !todo.checked
+    } : todo))    
+  }
+
+  const toggleSorting = () => {
+    setsortCompleted(prev => !prev);
+  }
+
+  const getSortedTodos = () => {
+    if(sortCompleted){
+      return [...todoList].sort((a,b) => {
+        if(a.checked === b.checked) return 0;
+        return a.checked ? 1 : -1;
+      })
+    } 
+
+    return todoList;
+  }
+
   return (
     <>
       <div>Todo List</div>
@@ -63,19 +87,32 @@ export default function App() {
         {editMode && <button onClick={cancelEdit}> cancel</button>}
       </div>
 
+      <div className="todo-options">
+        <label>
+          <input 
+            type="checkbox" 
+            checked={sortCompleted} 
+            onChange={toggleSorting} 
+          />
+          Sort incomplete tasks first
+        </label>
+      </div>
+
       <div className="todo-list">
         {todoList.length > 0 ? (
           <table>
             <thead>
               <tr>
+                <th>Checkbox</th>
                 <th>Index</th>
                 <th>Task</th>
                 <th>Crud Op</th>
               </tr>
             </thead>
             <tbody>
-              {todoList.map((todo: any) => (
+              {getSortedTodos().map((todo: any) => (
                 <tr key={todo.id}>
+                  <input type="checkbox" value={todo.checked} onChange={() => handleCheckbox(todo.id)}/>
                   <td>{todo.id}</td>
                   <td>{todo.value}</td>
                   <td>
